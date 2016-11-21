@@ -42,12 +42,6 @@ for {set i 1} {$i <= $xmax} {incr i} {
 		grid columnconfigure . all -weight 1 -minsize 60
 		grid rowconfigure . all -weight 1 -minsize 60
 
-		bind .b$i$j <Enter> {
-			%W configure -bg red
-		}
-		bind .b$i$j <Leave> {
-			%W configure -bg $color
-		}
 		bind .b$i$j <Button> {
 			set x [string range %W 2 2]
 			set y [string range %W 3 3]
