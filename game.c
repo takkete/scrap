@@ -1,8 +1,19 @@
 #include <stdio.h>
 #include <string.h>
 
-#define XMAX 9
-#define YMAX 9
+#ifdef SHOGI
+#	define XMAX 9
+#	define YMAX 9
+#endif
+#ifdef CHESS
+#	define XMAX 8
+#	define YMAX 8
+#endif
+#ifdef REVERSI
+#	define XMAX 8
+#	define YMAX 8
+#endif
+
 char bd[YMAX+2][XMAX+2];
 
 void disp()
@@ -50,27 +61,42 @@ int main(int argc, char* argv[])
 
 	memset(bd,0,sizeof(bd));
 
+#ifdef CHESS
+	printf("INIT,8,8,check\n");
+	for(i=1;i<=8;i++){
+	bd[2][i]='p';	bd[7][i]='P';	// Pawn 
+	}
+	bd[1][1]='r';	bd[8][1]='R';	// Rook
+	bd[1][2]='n';	bd[8][2]='N';	// Knight
+	bd[1][3]='i';	bd[8][3]='I';	// Bishop
+	bd[1][4]='q';	bd[8][4]='Q';	// Queen
+	bd[1][5]='k';	bd[8][5]='K';	// King
+	bd[1][6]='i';	bd[8][6]='I';	// Bishop
+	bd[1][7]='n';	bd[8][7]='N';	// Knight
+	bd[1][8]='r';	bd[8][8]='R';	// Rook
+
+#endif
 #ifdef REVERSI
 	printf("INIT,8,8,green\n");
 	bd[4][4]='W'; bd[5][4]='B';
 	bd[4][5]='B'; bd[5][5]='W';
-
-#else
+#endif
+#ifdef SHOGI
 	printf("INIT,9,9,yellow\n");
 	for(i=1;i<=9;i++){
 		bd[7][i]='f';
 	}
-	bd[8][8]='t';	//Hisha
-	bd[8][2]='x';	//Kaku
-	bd[9][1]='s';	//Kyosha
-	bd[9][2]='u';	//Keima
-	bd[9][3]='g';	//Gin
-	bd[9][4]='a';	//Kin
-	bd[9][5]='o';	//O
-	bd[9][6]='a';	//Kin
-	bd[9][7]='g';	//Gin
-	bd[9][8]='u';	//Keima
-	bd[9][9]='s';	//Kyosha
+	bd[8][8]='t';	// Hisha
+	bd[8][2]='x';	// Kaku
+	bd[9][1]='s';	// Kyosha
+	bd[9][2]='u';	// Keima
+	bd[9][3]='g';	// Gin
+	bd[9][4]='a';	// Kin
+	bd[9][5]='o';	// O
+	bd[9][6]='a';	// Kin
+	bd[9][7]='g';	// Gin
+	bd[9][8]='u';	// Keima
+	bd[9][9]='s';	// Kyosha
 #endif
 	fflush(stdout);
 

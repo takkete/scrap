@@ -20,6 +20,18 @@ proc update_board { pipe } {
 		if {$bw == "s"} { .b$xy configure -text "香"  -fg black }
 		if {$bw == "t"} { .b$xy configure -text "飛"  -fg black }
 		if {$bw == "x"} { .b$xy configure -text "角"  -fg black }
+		if {$bw == "P"} { .b$xy configure -text "P"  -fg blue }
+		if {$bw == "R"} { .b$xy configure -text "R"  -fg blue }
+		if {$bw == "I"} { .b$xy configure -text "I"  -fg blue }
+		if {$bw == "N"} { .b$xy configure -text "N"  -fg blue }
+		if {$bw == "Q"} { .b$xy configure -text "Q"  -fg blue }
+		if {$bw == "K"} { .b$xy configure -text "K"  -fg blue }
+		if {$bw == "p"} { .b$xy configure -text "p"  -fg blue }
+		if {$bw == "r"} { .b$xy configure -text "r"  -fg blue }
+		if {$bw == "i"} { .b$xy configure -text "i"  -fg blue }
+		if {$bw == "n"} { .b$xy configure -text "n"  -fg blue }
+		if {$bw == "q"} { .b$xy configure -text "q"  -fg blue }
+		if {$bw == "k"} { .b$xy configure -text "k"  -fg blue }
 	}
 }
 
@@ -37,7 +49,16 @@ if { $cmd == "INIT" } {
 set turnsw 0
 for {set i 1} {$i <= $xmax} {incr i} {
 	for {set j 1} {$j <= $ymax} {incr j} {
-		button .b$i$j -font {FreeMono 40 bold} -bg $color -activebackground yellow -activeforeground red
+		if { $color == "check" } {
+			if { [expr ($i + $j) % 2] == 0 } {
+				set bgcolor($i$j) black
+			} else {
+				set bgcolor($i$j) white
+			}
+		} else {
+			set bgcolor($i$j) $color
+		}
+		button .b$i$j -font {FreeMono 40 bold} -bg $bgcolor($i$j) -activebackground yellow -activeforeground red
 		grid .b$i$j -in . -row $j -column $i -sticky nsew
 		grid columnconfigure . all -weight 1 -minsize 60
 		grid rowconfigure . all -weight 1 -minsize 60
