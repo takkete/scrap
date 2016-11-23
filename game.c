@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef DRA
+#	define XMAX 21
+#	define YMAX 15
+#endif
 #ifdef SHOGI
 #	define XMAX 9
 #	define YMAX 9
@@ -22,7 +26,7 @@ void disp()
 	for(y = 1; y <= YMAX; y++)
 		for(x = 1; x <= XMAX; x++)
 			if(bd[y][x] != 0 )
-				printf("%d%d,%c\n",x,y,bd[y][x]);
+				printf("%d_%d,%c\n",x,y,bd[y][x]);
 }
 
 int check(int x, int y, int xx, int yy, char bw, int first);
@@ -52,7 +56,7 @@ int check(int x, int y, int xx, int yy, char bw, int first)
 
 int main(int argc, char* argv[])
 {
-	int i;
+	int i,j;
 	char disc;
 	int xx[]={-1,-1, 0, 1, 1, 1, 0, -1};
 	int yy[]={ 0,-1,-1,-1, 0, 1, 1,  1};
@@ -61,6 +65,42 @@ int main(int argc, char* argv[])
 
 	memset(bd,0,sizeof(bd));
 
+#ifdef DRA
+	printf("INIT,21,15,map\n");
+	for(x=1;x<=10;x++){
+	for(y=1;y<=15;y++){
+		bd[y][x]='t';// Tree
+	}
+	}
+	for(x=5;x<=21;x++){
+	for(y=13;y<=15;y++){
+		bd[y][x]='s';// seq
+	}
+	}
+	for(x=8;x<=21;x++){
+	for(y=1;y<=3;y++){
+		bd[y][x]='m';// mt.
+	}
+	}
+	for(x=15;x<=21;x++){
+	for(y=4;y<=6;y++){
+		bd[y][x]='h';// hill
+	}
+	}
+	for(x=4;x<=10;x++){
+	for(y=2;y<=10;y++){
+		bd[y][x]='f';// field
+	}
+	}
+	for(x=3;x<=7;x++){
+	for(y=12;y<=13;y++){
+		bd[y][x]='m';// mt.
+	}
+	}
+	bd[10][20]='v';// Village
+	bd[6][15]='c';// castle
+	bd[8][11]='p';// Player
+#endif
 #ifdef CHESS
 	printf("INIT,8,8,check\n");
 	for(i=1;i<=8;i++){

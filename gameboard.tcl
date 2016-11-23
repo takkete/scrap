@@ -1,4 +1,14 @@
+set game "a"
+image create photo img("f") -file "dra/dra-f.ppm"
+image create photo img("p") -file "dra/dra-p.ppm"
+image create photo img("m") -file "dra/dra-m.ppm"
+image create photo img("t") -file "dra/dra-t.ppm"
+image create photo img("h") -file "dra/dra-h.ppm"
+image create photo img("s") -file "dra/dra-s.ppm"
+image create photo img("c") -file "dra/dra-c.ppm"
+image create photo img("v") -file "dra/dra-v.ppm"
 proc update_board { pipe } {
+	global game
 	while {[gets $pipe str] >= 0} {
 		set first_char [string range $str 0 0]
 
@@ -32,6 +42,16 @@ proc update_board { pipe } {
 		if {$bw == "n"} { .b$xy configure -text "n"  -fg blue }
 		if {$bw == "q"} { .b$xy configure -text "q"  -fg blue }
 		if {$bw == "k"} { .b$xy configure -text "k"  -fg blue }
+		if {$game == "dra"} {
+		if {$bw == "p"} { .b$xy configure -image img("p") }
+		if {$bw == "f"} { .b$xy configure -image img("f") }
+		if {$bw == "s"} { .b$xy configure -image img("s") }
+		if {$bw == "v"} { .b$xy configure -image img("v") }
+		if {$bw == "c"} { .b$xy configure -image img("c") }
+		if {$bw == "m"} { .b$xy configure -image img("m") }
+		if {$bw == "h"} { .b$xy configure -image img("h") }
+		if {$bw == "t"} { .b$xy configure -image img("t") }
+		}
 	}
 }
 
@@ -44,6 +64,14 @@ if { $cmd == "INIT" } {
 	set xmax [lindex $arr 1]
 	set ymax [lindex $arr 2]
 	set color [lindex $arr 3]
+	if { $color == "map" } {
+		set game "dra"
+		set boxsize 32
+		set boxsize 32
+	} else {
+		set boxsize 60
+		set boxsize 60
+	}
 }
 
 set turnsw 0
@@ -51,21 +79,25 @@ for {set i 1} {$i <= $xmax} {incr i} {
 	for {set j 1} {$j <= $ymax} {incr j} {
 		if { $color == "check" } {
 			if { [expr ($i + $j) % 2] == 0 } {
-				set bgcolor($i$j) black
+				set bgcolor(${i}_${j}) black
 			} else {
-				set bgcolor($i$j) white
+				set bgcolor(${i}_${j}) white
 			}
 		} else {
-			set bgcolor($i$j) $color
+			set bgcolor(${i}_${j}) $color
 		}
-		button .b$i$j -font {FreeMono 40 bold} -bg $bgcolor($i$j) -activebackground yellow -activeforeground red
-		grid .b$i$j -in . -row $j -column $i -sticky nsew
-		grid columnconfigure . all -weight 1 -minsize 60
-		grid rowconfigure . all -weight 1 -minsize 60
+		if {$game == "dra"} {
+		button .b${i}_${j} -font {FreeMono 40 bold} -image img("f")  -activebackground yellow -activeforeground red -bd 0  -relief flat
+		} else {
+		button .b${i}_${j} -font {FreeMono 40 bold} -bg $bgcolor(${i}_${j}) -activebackground yellow -activeforeground red
+		}
+		grid .b${i}_${j} -in . -row $j -column $i -sticky nsew -ipadx 0 -padx 0 -pady 0 -ipady 0
+		grid columnconfigure . all -weight 1 -minsize $boxsize
+		grid rowconfigure . all -weight 1 -minsize $boxsize
 
-		bind .b$i$j <Button> {
+		bind .b${i}_${j} <Button> {
 			set x [string range %W 2 2]
-			set y [string range %W 3 3]
+			set y [string range %W 4 4]
 			puts $pipe "$x,$y\n";flush $pipe
 
 			update_board $pipe
